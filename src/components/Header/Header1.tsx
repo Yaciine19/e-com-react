@@ -96,7 +96,7 @@ const Header1 = () => {
                 }}
                 color="inherit"
               >
-                <LightModeOutlined sx={{ fontSize: "20px", color: "#fff" }} />
+                <DarkModeOutlined sx={{ fontSize: "20px", color: "#fff" }} />
               </IconButton>
             ) : (
               <IconButton
@@ -109,7 +109,7 @@ const Header1 = () => {
                 }}
                 color="inherit"
               >
-                <DarkModeOutlined sx={{ fontSize: "20px" }} />
+                <LightModeOutlined sx={{ fontSize: "20px" }} />
               </IconButton>
             )}
           </div>
