@@ -3,10 +3,10 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
+import type { Product } from "../../../Types";
 
 
-
-const ProductDetails = ({ clickedProduct }) => {
+const ProductDetails = ({ product }: Product) => {
   const [selectedImg, setselectedImg] = useState(0);
   return (
     <Box
@@ -21,7 +21,7 @@ const ProductDetails = ({ clickedProduct }) => {
         <img
           width={360}
           src={
-            clickedProduct.attributes.productImg.data[selectedImg].attributes
+            product.attributes.productImg.data[selectedImg].attributes
               .url
           }
           alt=""
@@ -30,13 +30,13 @@ const ProductDetails = ({ clickedProduct }) => {
 
       <Box sx={{ py: 2, textAlign: { xs: "center", sm: "left" } }}>
         <Typography variant="h5">
-          {clickedProduct.attributes.productTitle}
+          {product.attributes.productTitle}
         </Typography>
         <Typography my={0.4} fontSize={"22px"} color={"crimson"} variant="h6">
-          ${clickedProduct.attributes.productPrice}
+          ${product.attributes.productPrice}
         </Typography>
         <Typography variant="body1">
-          {clickedProduct.attributes.productDescription}
+          {product.attributes.productDescription}
         </Typography>
 
         <Stack
@@ -57,7 +57,7 @@ const ProductDetails = ({ clickedProduct }) => {
               },
             }}
           >
-            {clickedProduct.attributes.productImg.data.map(
+            {product.attributes.productImg.data.map(
               (
                 item: { id: string; attributes: { url: string } },
                 index: number

@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Card from "@mui/material/Card";
@@ -20,12 +20,11 @@ import CardMedia from "@mui/material/CardMedia";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Close } from "@mui/icons-material";
 import ProductDetails from "./ProductDetails";
-// import { useGetproductByNameQuery } from "../../Redux/product";
+import { useGetproductByNameQuery } from "../../Redux/product";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Main = () => {
-
-  const handleAlignment = (e: React.ChangeEvent<HTMLInputElement>, newValue: string) => {
+  const handleAlignment = (newValue: string) => {
     if (newValue !== null) {
       setMyDate(newValue);
     }
@@ -47,38 +46,34 @@ const Main = () => {
   const womenCategoryAPI = "products?populate=*&filters[category][$eq]=women";
 
   const [myDate, setMyDate] = useState(allProductsAPI);
-//   const { data, error, isLoading } = useGetproductByNameQuery(myDate);
+  const { data, error, isLoading } = useGetproductByNameQuery(myDate);
   const [clickedProduct, setclickedProduct] = useState({});
+  // console.log(data.data[0].productImg[0].url)
 
-//   if (isLoading) {
-//     return (
-//       <Box sx={{ py: 11, textAlign: "center" }}>
-//         <CircularProgress />
-//       </Box>
-//     );
-//   }
+  if (isLoading) {
+    return (
+      <Box sx={{ py: 11, textAlign: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-//   if (error) {
-//     return (
-//       <Container
-//         sx={{
-//           py: 11,
-//           textAlign: "center",
-//         }}
-//       >
-//         <Typography variant="h6">
-//           {
-//             // @ts-ignore
-//             error.error
-//           }
-//         </Typography>
+  if (error) {
+    return (
+      <Container
+        sx={{
+          py: 11,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6">{error.error}</Typography>
 
-//         <Typography variant="h6">Please try again later</Typography>
-//       </Container>
-//     );
-//   }
+        <Typography variant="h6">Please try again later</Typography>
+      </Container>
+    );
+  }
 
-//   if (data) {
+  if (data) {
     return (
       <Container sx={{ py: 9 }}>
         <Stack
@@ -99,7 +94,7 @@ const Main = () => {
             color="error"
             value={myDate}
             exclusive
-            onChange={handleAlignment}
+            onChange={() => handleAlignment(myDate)}
             aria-label="text alignment"
             sx={{
               ".Mui-selected": {
@@ -143,7 +138,7 @@ const Main = () => {
           flexWrap={"wrap"}
           justifyContent={"space-between"}
         >
-          {/* <AnimatePresence>
+          <AnimatePresence>
             {data.data.map((item) => {
               return (
                 <Card
@@ -165,7 +160,7 @@ const Main = () => {
                 >
                   <CardMedia
                     sx={{ height: 277 }}
-                    image={`${item.attributes.productImg.data[0].attributes.url}`}
+                    image={`http://localhost:1337${item.productImg[0].url}`}
                     title="green iguana"
                   />
 
@@ -176,18 +171,16 @@ const Main = () => {
                       alignItems={"center"}
                     >
                       <Typography gutterBottom variant="h6" component="div">
-                        {item.attributes.productTitle}
+                        {item.productTitle}
                       </Typography>
 
                       <Typography variant="subtitle1" component="p">
-                        ${item.attributes.productPrice}
+                        ${item.productPrice}
                       </Typography>
                     </Stack>
 
                     <Typography variant="body2" color="text.secondary">
-                      Lizards are a widespread group of squamate reptiles, with
-                      over 6,000 species, ranging across all continents except
-                      Antarctica
+                      {item.productDescription}
                     </Typography>
                   </CardContent>
 
@@ -209,14 +202,14 @@ const Main = () => {
                     <Rating
                       precision={0.1}
                       name="read-only"
-                      value={item.attributes.productRating}
+                      value={item.productRating}
                       readOnly
                     />
                   </CardActions>
                 </Card>
               );
             })}
-          </AnimatePresence> */}
+          </AnimatePresence>
         </Stack>
 
         <Dialog
@@ -243,6 +236,6 @@ const Main = () => {
       </Container>
     );
   }
-// };
+};
 
 export default Main;
