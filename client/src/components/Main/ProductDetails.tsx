@@ -3,10 +3,13 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useState } from "react";
-import type { Product } from "../../../Types";
+import type { SingleProduct } from "../../../Types";
 
+interface ProductDetailsProps {
+  product: SingleProduct;
+}
 
-const ProductDetails = ({ product }: Product) => {
+const ProductDetails = ({ product }: ProductDetailsProps) => {
   const [selectedImg, setselectedImg] = useState(0);
   return (
     <Box
@@ -20,24 +23,17 @@ const ProductDetails = ({ product }: Product) => {
       <Box sx={{ display: "flex" }}>
         <img
           width={360}
-          src={
-            product.attributes.productImg.data[selectedImg].attributes
-              .url
-          }
+          src={`${import.meta.env.VITE_BASE_URL}${product.productImg[selectedImg].url}`}
           alt=""
         />
       </Box>
 
       <Box sx={{ py: 2, textAlign: { xs: "center", sm: "left" } }}>
-        <Typography variant="h5">
-          {product.attributes.productTitle}
-        </Typography>
+        <Typography variant="h5">{product.productTitle}</Typography>
         <Typography my={0.4} fontSize={"22px"} color={"crimson"} variant="h6">
-          ${product.attributes.productPrice}
+          ${product.productPrice}
         </Typography>
-        <Typography variant="body1">
-          {product.attributes.productDescription}
-        </Typography>
+        <Typography variant="body1">{product.productDescription}</Typography>
 
         <Stack
           sx={{ justifyContent: { xs: "center", sm: "left" } }}
@@ -57,11 +53,7 @@ const ProductDetails = ({ product }: Product) => {
               },
             }}
           >
-            {product.attributes.productImg.data.map(
-              (
-                item: { id: string; attributes: { url: string } },
-                index: number
-              ) => {
+            {product.productImg.map((item, index) => {
                 return (
                   <ToggleButton
                     key={item.id}
@@ -81,7 +73,7 @@ const ProductDetails = ({ product }: Product) => {
                       style={{ borderRadius: 3 }}
                       height={"100%"}
                       width={"100%"}
-                      src={item.attributes.url}
+                      src={`${import.meta.env.VITE_BASE_URL}${item.url}`}
                       alt=""
                     />
                   </ToggleButton>

@@ -61,3 +61,17 @@ type ImageFormat = {
   sizeInBytes: number;
   url: string;
 };
+
+export type SingleProduct = {
+  id: number;
+  documentId: string;
+  productTitle: string;
+  productPrice: number;
+  productDescription: string;
+  productRating: number;
+  productCategory: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  productImg: ProductImage[];
+};

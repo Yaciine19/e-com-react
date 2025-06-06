@@ -22,6 +22,7 @@ import { Close } from "@mui/icons-material";
 import ProductDetails from "./ProductDetails";
 import { useGetproductByNameQuery } from "../../Redux/product";
 import { AnimatePresence, motion } from "framer-motion";
+import type { SingleProduct } from "../../../Types";
 
 const Main = () => {
   const handleAlignment = (newValue: string) => {
@@ -42,13 +43,14 @@ const Main = () => {
   };
 
   const allProductsAPI = "products?populate=*";
-  const menCategoryAPI = "products?populate=*&filters[category][$eq]=men";
-  const womenCategoryAPI = "products?populate=*&filters[category][$eq]=women";
+  const menCategoryAPI =
+    "products?populate=*&filters[productCategory][$eq]=men";
+  const womenCategoryAPI =
+    "products?populate=*&filters[productCategory][$eq]=women";
 
-  const [myDate, setMyDate] = useState(allProductsAPI);
-  const { data, error, isLoading } = useGetproductByNameQuery(myDate);
-  const [clickedProduct, setclickedProduct] = useState({});
-  // console.log(data.data[0].productImg[0].url)
+  const [myData, setMyDate] = useState(allProductsAPI);
+  const { data, error, isLoading } = useGetproductByNameQuery(myData);
+  const [product, setProduct] = useState<SingleProduct | null>(null);
 
   if (isLoading) {
     return (
@@ -66,8 +68,6 @@ const Main = () => {
           textAlign: "center",
         }}
       >
-        <Typography variant="h6">{error.error}</Typography>
-
         <Typography variant="h6">Please try again later</Typography>
       </Container>
     );
@@ -92,9 +92,9 @@ const Main = () => {
 
           <ToggleButtonGroup
             color="error"
-            value={myDate}
+            value={myData}
             exclusive
-            onChange={() => handleAlignment(myDate)}
+            onChange={(event, newValue) => handleAlignment(newValue)}
             aria-label="text alignment"
             sx={{
               ".Mui-selected": {
@@ -136,7 +136,7 @@ const Main = () => {
         <Stack
           direction={"row"}
           flexWrap={"wrap"}
-          justifyContent={"space-between"}
+          gap={5}
         >
           <AnimatePresence>
             {data.data.map((item) => {
@@ -160,7 +160,9 @@ const Main = () => {
                 >
                   <CardMedia
                     sx={{ height: 277 }}
-                    image={`http://localhost:1337${item.productImg[0].url}`}
+                    image={`${import.meta.env.VITE_BASE_URL}${
+                      item?.productImg[0]?.url
+                    }`}
                     title="green iguana"
                   />
 
@@ -171,16 +173,16 @@ const Main = () => {
                       alignItems={"center"}
                     >
                       <Typography gutterBottom variant="h6" component="div">
-                        {item.productTitle}
+                        {item?.productTitle}
                       </Typography>
 
                       <Typography variant="subtitle1" component="p">
-                        ${item.productPrice}
+                        ${item?.productPrice}
                       </Typography>
                     </Stack>
 
                     <Typography variant="body2" color="text.secondary">
-                      {item.productDescription}
+                      {item?.productDescription}
                     </Typography>
                   </CardContent>
 
@@ -188,7 +190,7 @@ const Main = () => {
                     <Button
                       onClick={() => {
                         handleClickOpen();
-                        setclickedProduct(item);
+                        setProduct(item);
                       }}
                       sx={{ textTransform: "capitalize" }}
                       size="large"
@@ -202,7 +204,7 @@ const Main = () => {
                     <Rating
                       precision={0.1}
                       name="read-only"
-                      value={item.productRating}
+                      value={item?.productRating}
                       readOnly
                     />
                   </CardActions>
@@ -231,7 +233,7 @@ const Main = () => {
             <Close />
           </IconButton>
 
-          <ProductDetails clickedProduct={clickedProduct} />
+          {product && <ProductDetails product={product} />}
         </Dialog>
       </Container>
     );
