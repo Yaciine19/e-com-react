@@ -5,6 +5,8 @@ import Header3 from "./components/Header/Header3";
 import { ColorModeContext, useMode } from "./theme";
 import Hero from "./components/Hero/Hero";
 import Footer from "./components/Footer/Footer";
+import Main from "./components/Main/Main";
+import ScrollToTop from "./components/Scroll/ScrollTop";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -22,10 +24,12 @@ function App() {
           }
         >
           <Hero />
-          
+          <Main />
         </Box>
 
         <Footer />
+
+        <ScrollToTop />
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
